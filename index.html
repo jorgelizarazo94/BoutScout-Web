@@ -991,11 +991,25 @@
         }
 
         function renderChart(dayData, preserveZoom = false) {
-            const trace = {
-                x: dayData.map(d => d.minute_of_day), y: dayData.map(d => d.egg_temperature),
-                type: 'scatter', mode: 'lines', line: { color: '#0f172a', width: 1.5 },
-                name: 'Temp', hovertemplate: 'Min: %{x}<br>Temp: %{y:.1f}°C<extra></extra>'
-            };
+            const eggTrace = {
+              x: dayData.map(d => d.minute_of_day),
+              y: dayData.map(d => d.egg_temperature),
+              type: 'scatter',
+              mode: 'lines',
+              line: { color: '#0f172a', width: 1.5 },
+              name: 'Nest / Egg temp',
+              hovertemplate: 'Min: %{x}<br>Nest/Egg: %{y:.1f}°C<extra></extra>'
+          };
+
+          const ambientTrace = {
+              x: dayData.map(d => d.minute_of_day),
+              y: dayData.map(d => d.ambient_temperature),
+              type: 'scatter',
+              mode: 'lines',
+              line: { color: '#cbd5e1', width: 1.2 },
+              name: 'Ambient temp',
+              hovertemplate: 'Min: %{x}<br>Ambient: %{y:.1f}°C<extra></extra>'
+          };
 
             const shapes = currentEvents.map(ev => {
                 let isSelected = (ev.id === selectedEventId);
@@ -1017,7 +1031,7 @@
 
             const layout = {
                 margin: { t: 10, r: 10, b: 0, l: 40 },
-                hovermode: 'x unified', showlegend: false,
+                hovermode: 'x unified', showlegend: true,
                 dragmode: isEditMode ? 'select' : 'zoom',
                 xaxis: {
                     title: '',
@@ -1029,9 +1043,9 @@
             };
 
             if (preserveZoom) {
-                Plotly.react('plotlyChart', [trace], layout, {responsive: true, displayModeBar: false});
+                Plotly.react('plotlyChart', [ambientTrace, eggTrace], layout, {responsive: true, displayModeBar: false});
             } else {
-                Plotly.newPlot('plotlyChart', [trace], layout, {responsive: true, displayModeBar: false});
+                Plotly.newPlot('plotlyChart', [ambientTrace, eggTrace], layout, {responsive: true, displayModeBar: false});
 
                 graphDiv.on('plotly_selected', function(eventData) {
                     if (!isEditMode) return;
