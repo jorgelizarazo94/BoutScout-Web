@@ -70,7 +70,9 @@
                 <div class="text-sm text-slate-600 space-y-4 mb-6 text-left bg-slate-50 p-5 rounded-xl border border-slate-100">
                     <p data-i18n="welcomeP1">La aplicación está alojada en GitHub Pages como un sitio web normal, pero el modelo se ejecuta dentro de tu navegador utilizando ONNX Runtime Web. Al abrir esta URL y subir tus archivos CSV, tu navegador carga el modelo y ejecuta la inferencia localmente, permitiendo la revisión manual y la exportación de resultados. Ningún archivo CSV o dato es enviado a ningún servidor externo. ¡Privacidad 100% garantizada!</p>
                     <p data-i18n="welcomeP2">Este es un proyecto sin fines de lucro, creado desde Latinoamérica para el mundo, con el objetivo de democratizar el análisis del comportamiento aviar.</p>
-
+                    <p data-i18n="welcomeP4">
+                        If you would like to share your post-edition results, discuss incubation patterns, or explore possible collaboration, please feel free to contact us. We are open to collaborative work whenever time and project scope allow.
+                    </p>
                     <div class="flex flex-col gap-2 mt-4">
                         <a href="https://wildlabs.net/" target="_blank" rel="noopener noreferrer" class="font-bold text-slate-700 bg-blue-50/50 p-3 rounded-lg border border-blue-100 flex items-center gap-2 hover:bg-blue-100 transition">
                             <i class="ph-fill ph-heart text-blue-500 text-lg"></i>
@@ -156,38 +158,60 @@
 
     <!-- Encabezado Principal -->
     <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between shadow-sm z-10 shrink-0">
-        <div class="flex items-center gap-4">
-            <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 flex items-center justify-center">
-                <img src="img/boutscout-icon.svg" alt="BoutScout icon" class="w-10 h-10 object-contain">
-            </div>
-            <div>
-                <h1 class="text-xl font-bold text-slate-800 leading-tight">BoutScout App</h1>
-                <div class="flex items-center gap-2 mt-0.5">
-                    <span class="relative flex h-2 w-2">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </span>
-                    <p class="text-xs text-green-600 font-bold uppercase tracking-wider" data-i18n="appSubtitle">Procesamiento 100% Local (Privado)</p>
-                </div>
-            </div>
+    <div class="flex items-center gap-4">
+        <div class="bg-white p-1.5 rounded-lg shadow-sm border border-slate-200 flex items-center justify-center">
+            <img src="img/boutscout-icon.svg" alt="BoutScout icon" class="w-28 h-28 object-contain">
         </div>
-       <div class="flex gap-3">
-            <!--
-            <a href="https://github.com/sponsors/jorgelizarazo94"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition shadow-sm flex items-center gap-2">
-                <i class="ph ph-heart text-lg"></i>
-                <span>Support BoutScout</span>
-            </a>
-            -->
 
-            <button onclick="finishInference()" class="bg-slate-800 hover:bg-slate-900 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition shadow-sm flex items-center gap-2">
-                <i class="ph ph-flag-checkered text-lg"></i>
-                <span data-i18n="btnFinish">Terminar Inferencia</span>
-            </button>
+        <div>
+            <h1 class="text-xl font-bold text-slate-800 leading-tight">BoutScout App</h1>
+
+            <p class="text-[11px] text-slate-700 mt-0.5">
+                Made by
+                <a href="https://orcid.org/0000-0002-9079-1058"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="font-bold text-slate-900 hover:text-blue-600 hover:underline">
+                    Jorge Lizarazo
+                </a>
+                &
+                <a href="https://orcid.org/0000-0003-1896-8653"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="font-bold text-slate-900 hover:text-blue-600 hover:underline">
+                    Gustavo Londoño
+                </a>
+            </p>
+
+            <div class="flex items-center gap-2 mt-0.5">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <p class="text-xs text-green-600 font-bold uppercase tracking-wider" data-i18n="appSubtitle">
+                    Procesamiento 100% Local (Privado)
+                </p>
+            </div>
         </div>
-    </header>
+    </div>
+
+    <div class="flex gap-3">
+        <!--
+        <a href="https://github.com/sponsors/jorgelizarazo94"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition shadow-sm flex items-center gap-2">
+            <i class="ph ph-heart text-lg"></i>
+            <span>Support BoutScout</span>
+        </a>
+        -->
+
+        <button onclick="finishInference()" class="bg-slate-800 hover:bg-slate-900 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition shadow-sm flex items-center gap-2">
+            <i class="ph ph-flag-checkered text-lg"></i>
+            <span data-i18n="btnFinish">Terminar Inferencia</span>
+        </button>
+    </div>
+</header>
 
     <div class="flex flex-1 min-h-0">
 
@@ -449,6 +473,7 @@
         // --- 0. DICCIONARIO DE TRADUCCIONES (i18n) ---
         const translations = {
             es: {
+                welcomeP4: "Si deseas compartir tus resultados después de la edición manual, discutir patrones de incubación o explorar una posible colaboración, no dudes en contactarnos. Estamos abiertos a colaborar siempre que el tiempo y el alcance del proyecto lo permitan.",
                 welcomeTitle: "Bienvenido a BoutScout",
                 welcomeP1: "La aplicación está alojada en GitHub Pages como un sitio web normal, pero el modelo se ejecuta dentro de tu navegador utilizando ONNX Runtime Web. Al abrir esta URL y subir tus archivos CSV, tu navegador carga el modelo y ejecuta la inferencia localmente, permitiendo la revisión manual y la exportación de resultados. Ningún archivo CSV o dato es enviado a ningún servidor externo. ¡Privacidad 100% garantizada!",
                 welcomeP2: "Este es un proyecto sin fines de lucro, creado desde Latinoamérica para el mundo, con el objetivo de democratizar el análisis del comportamiento aviar.",
@@ -497,6 +522,7 @@
                 demoDownload: "Descargar CSV"
             },
             en: {
+                welcomeP4: "If you would like to share your post-edition results, discuss incubation patterns, or explore possible collaboration, please feel free to contact us. We are open to collaborative work whenever time and project scope allow.",
                 welcomeTitle: "Welcome to BoutScout",
                 welcomeP1: "The app lives on GitHub Pages as a normal website, but the model runs inside your browser using ONNX Runtime Web. By opening this URL and uploading CSVs, your browser loads the model, runs inference locally, allows manual review, and exports results. No CSV or data is ever sent to an external server. 100% privacy guaranteed!",
                 welcomeP2: "This is a non-profit project, created from Latin America for the world, aiming to democratize avian behavior analysis.",
@@ -545,6 +571,7 @@
                 demoDownload: "Download CSV"
             },
             pt: {
+                welcomeP4: "Se quiser compartilhar seus resultados após a edição manual, discutir padrões de incubação ou explorar uma possível colaboração, fique à vontade para entrar em contato conosco. Estamos abertos a colaborações sempre que o tempo e o escopo do projeto permitirem.",
                 welcomeTitle: "Bem-vindo ao BoutScout",
                 welcomeP1: "O aplicativo está hospedado no GitHub Pages como um site normal, mas o modelo é executado dentro do seu navegador usando o ONNX Runtime Web. Ao abrir esta URL e fazer o upload de CSVs, seu navegador carrega o modelo, executa a inferência localmente, permite a revisão manual e exporta os resultados. Nenhum CSV ou dado é enviado para um servidor externo. Privacidade 100% garantida!",
                 welcomeP2: "Este é um projeto sem fins lucrativos, criado da América Latina para o mundo, com o objetivo de democratizar a análise do comportamento das aves.",
@@ -593,6 +620,7 @@
                 demoDownload: "Baixar CSV"
             },
             fr: {
+                welcomeP4: "Si vous souhaitez partager vos résultats après correction manuelle, discuter des patrons d’incubation ou explorer une éventuelle collaboration, n’hésitez pas à nous contacter. Nous sommes ouverts aux collaborations lorsque le temps et la portée du projet le permettent.",
                 welcomeTitle: "Bienvenue sur BoutScout",
                 welcomeP1: "L'application est hébergée sur GitHub Pages comme un site web normal, mais le modèle s'exécute dans votre navigateur à l'aide d'ONNX Runtime Web. En ouvrant cette URL et en téléchargeant des fichiers CSV, votre navigateur charge le modèle, exécute l'inférence localement, permet une révision manuelle et exporte les résultats. Aucun fichier CSV ou donnée n'est envoyé à un serveur externe. Confidentialité garantie à 100 % !",
                 welcomeP2: "Il s'agit d'un projet à but non lucratif, créé depuis l'Amérique latine pour le monde entier, visant à démocratiser l'analyse du comportement des oiseaux.",
