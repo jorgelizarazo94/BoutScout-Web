@@ -38,7 +38,7 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800 overflow-y-auto overflow-x-hidden relative">
 <!-- Temporary Password Gate -->
-<div id="passwordGate" class="fixed inset-0 bg-slate-950 z-[200] flex items-center justify-center px-4">
+<div id="passwordGate" class="hidden fixed inset-0 bg-slate-950 z-[200] flex items-center justify-center px-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
         <img src="img/boutscout-logo.svg" alt="BoutScout Logo" class="h-20 mx-auto mb-5 object-contain">
 
@@ -457,36 +457,51 @@ Signature: BoutScout-JL-GL-2026-local-onnx
     </div>
 
     <script>
-      // --- TEMPORARY PASSWORD GATE ---
-      const TEMP_PASSWORD = "tangaramulticolor123";
+    // --- TEMPORARY PASSWORD GATE ---
+    const ENABLE_PASSWORD_GATE = false;
+    const TEMP_PASSWORD = "tangaramulticolor123";
 
-      function checkPassword() {
-          const input = document.getElementById("passwordInput").value;
+    function checkPassword() {
+        if (!ENABLE_PASSWORD_GATE) {
+            document.getElementById("passwordGate").classList.add("hidden");
+            return;
+        }
 
-          if (input === TEMP_PASSWORD) {
-              sessionStorage.setItem("boutscout_access", "granted");
-              document.getElementById("passwordGate").classList.add("hidden");
-          } else {
-              document.getElementById("passwordError").classList.remove("hidden");
-          }
-      }
+        const input = document.getElementById("passwordInput").value;
 
-      window.addEventListener("DOMContentLoaded", function () {
-          const access = sessionStorage.getItem("boutscout_access");
+        if (input === TEMP_PASSWORD) {
+            sessionStorage.setItem("boutscout_access", "granted");
+            document.getElementById("passwordGate").classList.add("hidden");
+        } else {
+            document.getElementById("passwordError").classList.remove("hidden");
+        }
+    }
 
-          if (access === "granted") {
-              document.getElementById("passwordGate").classList.add("hidden");
-          }
+    window.addEventListener("DOMContentLoaded", function () {
+        const passwordGate = document.getElementById("passwordGate");
 
-          const passwordInput = document.getElementById("passwordInput");
-          if (passwordInput) {
-              passwordInput.addEventListener("keydown", function (e) {
-                  if (e.key === "Enter") {
-                      checkPassword();
-                  }
-              });
-          }
-      });
+        if (!ENABLE_PASSWORD_GATE) {
+            passwordGate.classList.add("hidden");
+            return;
+        }
+
+        const access = sessionStorage.getItem("boutscout_access");
+
+        if (access === "granted") {
+            passwordGate.classList.add("hidden");
+        } else {
+            passwordGate.classList.remove("hidden");
+        }
+
+        const passwordInput = document.getElementById("passwordInput");
+        if (passwordInput) {
+            passwordInput.addEventListener("keydown", function (e) {
+                if (e.key === "Enter") {
+                    checkPassword();
+                }
+            });
+        }
+    });
         // --- Funciones para el Modal de Bienvenida ---
         function acceptTerms() {
             document.getElementById('welcomeModal').classList.add('hidden');
