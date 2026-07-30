@@ -233,34 +233,12 @@ Signature: BoutScout-JL-GL-2026-local-onnx
         <!-- Panel Lateral de Controles -->
         <aside class="w-80 bg-slate-50 border-r border-slate-200 p-6 flex flex-col shrink-0 h-full min-h-0 overflow-y-auto overscroll-contain">
 
-            <!-- Estado del Modelo ONNX -->
-            <div class="mb-6 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <i class="ph ph-cpu text-blue-600 text-lg"></i> <span data-i18n="modelTitle">Motor de Inferencia</span>
-                </h2>
-
-                <div id="autoLoadStatus" class="flex flex-col gap-2">
-                    <div class="flex items-center gap-2 text-sm text-slate-600 font-medium">
-                        <i class="ph ph-spinner-gap animate-spin text-blue-500"></i> <span data-i18n="modelSearch">Buscando modelo en servidor...</span>
-                    </div>
-                </div>
-
-                <!-- Fallback manual -->
-                <div id="manualModelUpload" class="hidden mt-3">
-                    <p class="text-[11px] text-amber-600 mb-2 leading-tight" data-i18n="modelFallback">No se encontró el modelo automáticamente. Súbelo manualmente para esta demo:</p>
-                    <label class="flex items-center justify-center gap-2 border-2 border-dashed border-amber-300 bg-amber-50 rounded-lg p-2 text-center hover:bg-amber-100 transition cursor-pointer relative">
-                        <input type="file" id="onnxFileInput" accept=".onnx" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                        <i class="ph ph-upload-simple text-amber-600"></i>
-                        <span class="text-xs text-amber-700 font-bold" id="onnxNameDisplay" data-i18n="modelUpload">Subir model_final_bilstm.onnx</span>
-                    </label>
-                </div>
-            </div>
-              <!-- Instrucciones CSV -->
-              <a href="docs/BoutScout_CSV_instructions.pdf"
+              <!-- Guía de resultados -->
+              <a href="docs/BoutScout_results_guide_ES_EN_FR.pdf"
                  download
-                 class="mb-4 inline-flex items-center justify-center gap-2 w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-lg transition text-xs border border-slate-200">
-                  <i class="ph ph-file-pdf text-blue-600 text-base"></i>
-                  <span data-i18n="csvInstructionsBtn">CSV instructions</span>
+                 class="mb-4 inline-flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg transition text-xs shadow-sm">
+                  <i class="ph ph-file-pdf text-white text-base"></i>
+                  <span data-i18n="resultsGuideBtn">Guía trilingüe de resultados</span>
               </a>
 
             <!-- Carga de Datos CSV -->
@@ -275,9 +253,9 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                 </p>
 
                 <label class="block border-2 border-dashed border-slate-300 rounded-xl p-6 text-center transition relative bg-white opacity-50 shadow-sm" id="csvLabel">
-                    <input type="file" id="csvFileInput" accept=".csv" class="absolute inset-0 w-full h-full opacity-0 cursor-not-allowed" disabled>
+                    <input type="file" id="csvFileInput" accept=".csv" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                     <i class="ph ph-microsoft-excel-logo text-3xl text-slate-400 mb-2 block"></i>
-                    <span class="text-sm text-slate-600 font-bold" id="csvNameDisplay" data-i18n="dataWait">Esperando motor...</span>
+                    <span class="text-sm text-slate-600 font-bold" id="csvNameDisplay" data-i18n="dataReady">Selecciona uno o varios CSV</span>
                 </label>
 
               <div class="mt-3 bg-white border border-slate-200 rounded-lg p-3 text-xs text-slate-600">
@@ -299,10 +277,18 @@ Signature: BoutScout-JL-GL-2026-local-onnx
               </div>
             </div>
 
+            <!-- Selector de archivo/sensor -->
+            <div id="sourceSelectorContainer" class="hidden flex-col gap-2 mb-4">
+                <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+                    <i class="ph ph-bird text-blue-600 text-lg"></i> <span data-i18n="sourceTitle">2. CSV y sensor a revisar</span>
+                </h2>
+                <select id="sourceSelect" class="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm font-bold text-slate-700 cursor-pointer"></select>
+            </div>
+
             <!-- Selector de Día -->
             <div id="dateSelectorContainer" class="hidden flex-col gap-2">
                 <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
-                    <i class="ph ph-calendar-blank text-blue-600 text-lg"></i> <span data-i18n="dayTitle">2. Día a Revisar</span>
+                    <i class="ph ph-calendar-blank text-blue-600 text-lg"></i> <span data-i18n="dayTitle">3. Día a Revisar</span>
                 </h2>
                 <select id="dateSelect" class="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm font-bold text-slate-700 cursor-pointer">
                 </select>
@@ -374,8 +360,9 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                 </div>
 
                 <!-- Aviso de Modo Edición -->
-                <div id="editModeBanner" class="hidden bg-blue-50 border-b border-blue-200 px-6 py-2 flex items-center justify-between shrink-0">
-                    <div class="flex items-center gap-2 text-sm text-blue-800 font-medium">
+                <div id="editModeBanner" class="hidden bg-blue-50 border-b border-blue-200 px-6 py-3 flex-col gap-3 shrink-0">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex flex-wrap items-center gap-2 text-sm text-blue-800 font-medium">
                         <i class="ph ph-info text-blue-600 text-lg"></i>
                         <span data-i18n="editBannerInfo">Arrastra para seleccionar un área o haz clic en un segmento. Teclas:</span>
                         <strong class="bg-white px-2 py-0.5 rounded shadow-sm">1 = On</strong>
@@ -384,6 +371,30 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                         <strong class="bg-white px-2 py-0.5 rounded shadow-sm flex items-center gap-1"><i class="ph ph-backspace"></i> Borrar</strong>
                     </div>
                     <span id="selectedSegmentMsg" class="text-sm font-bold text-blue-600" data-i18n="editBannerNone">Ninguna selección</span>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button id="btnNewLabel" onclick="startNewLabel()" class="bg-slate-800 hover:bg-slate-900 text-white px-3 py-2 rounded-lg font-bold text-xs flex items-center gap-2">
+                            <i class="ph ph-plus-circle text-base"></i><span data-i18n="btnNewLabel">Nueva etiqueta</span>
+                        </button>
+                        <div id="labelActions" class="hidden flex-wrap items-center gap-2">
+                            <button onclick="applySelectedLabel('On')" class="text-white px-3 py-2 rounded-lg font-bold text-xs" style="background:#E28342">1 · On</button>
+                            <button onclick="applySelectedLabel('Off')" class="text-white px-3 py-2 rounded-lg font-bold text-xs" style="background:#535AA6">2 · Off</button>
+                            <button onclick="applySelectedLabel('Nocturnal')" class="text-white px-3 py-2 rounded-lg font-bold text-xs" style="background:#333E48">3 · Nocturnal</button>
+                            <button onclick="cancelEditSelection()" class="bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg font-bold text-xs" data-i18n="btnCancel">Cancelar</button>
+                        </div>
+                    </div>
+                    <div id="boundaryEditor" class="hidden bg-white border border-blue-200 rounded-xl p-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-700" data-i18n="boundaryTitle">Ajustar límites del segmento</span>
+                            <span id="boundaryValues" class="text-xs font-mono font-bold text-blue-700"></span>
+                        </div>
+                        <label class="block text-[11px] text-slate-500"><span data-i18n="boundaryStart">Inicio</span><input id="boundaryStart" type="range" min="0" max="1439" class="w-full accent-blue-600" oninput="previewBoundaryChange()"></label>
+                        <label class="block text-[11px] text-slate-500"><span data-i18n="boundaryEnd">Fin</span><input id="boundaryEnd" type="range" min="0" max="1439" class="w-full accent-blue-600" oninput="previewBoundaryChange()"></label>
+                        <div class="flex gap-2 mt-2">
+                            <button onclick="applyBoundaryChange()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg font-bold text-xs" data-i18n="btnApplyBounds">Aplicar límites</button>
+                            <button onclick="cancelEditSelection()" class="bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg font-bold text-xs" data-i18n="btnCancel">Cancelar</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Gráfica Interactiva con Minimapa -->
@@ -410,6 +421,7 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                                     <th class="px-5 py-3 border-b border-slate-200" data-i18n="thDuration">Duración</th>
                                     <th class="px-5 py-3 border-b border-slate-200" data-i18n="thTemp">Temp Prom.</th>
                                     <th class="px-5 py-3 border-b border-slate-200" data-i18n="thBehavior">Comportamiento</th>
+                                    <th class="px-5 py-3 border-b border-slate-200" data-i18n="thEdit">Editar</th>
                                 </tr>
                             </thead>
                             <tbody id="eventsTableBody" class="divide-y divide-slate-100"></tbody>
@@ -527,14 +539,19 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                 declineMsg: "Debes aceptar los términos para utilizar esta herramienta local.",
                 appSubtitle: "Procesamiento 100% Local (Privado)",
                 btnFinish: "Terminar Inferencia",
-                modelTitle: "Motor de Inferencia",
-                modelSearch: "Buscando modelo en servidor...",
-                modelFallback: "No se encontró el modelo automáticamente. Súbelo manualmente para esta demo:",
-                modelUpload: "Subir model_final_bilstm.onnx",
                 dataTitle: "1. Sube tus Datos",
                 dataDesc: "Tus datos nunca salen de tu computadora. Se procesan localmente.",
                 dataWait: "Esperando motor...",
-                dayTitle: "2. Día a Revisar",
+                dataReady: "Selecciona uno o varios CSV",
+                sourceTitle: "2. CSV y sensor a revisar",
+                dayTitle: "3. Día a Revisar",
+                resultsGuideBtn: "Guía trilingüe de resultados",
+                btnNewLabel: "Nueva etiqueta",
+                btnCancel: "Cancelar",
+                boundaryTitle: "Ajustar límites del segmento",
+                boundaryStart: "Inicio",
+                boundaryEnd: "Fin",
+                btnApplyBounds: "Aplicar límites",
                 legendTitle: "Leyenda de Comportamiento",
                 legendNocturnal: "Nocturnal (Teclado: 3)",
                 legendOff: "Off (Fuera del nido) (Teclado: 2)",
@@ -552,6 +569,7 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                 thDuration: "Duración",
                 thTemp: "Temp Prom.",
                 thBehavior: "Comportamiento",
+                thEdit: "Editar",
                 modalTitle: "Terminado",
                 modalDesc: "Tus resultados han sido exportados correctamente a tu carpeta de descargas locales.",
                 modalBtn: "Cerrar y Volver",
@@ -578,14 +596,19 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                 declineMsg: "You must accept the terms to use this local tool.",
                 appSubtitle: "100% Local Processing (Private)",
                 btnFinish: "Finish Inference",
-                modelTitle: "Inference Engine",
-                modelSearch: "Looking for model on server...",
-                modelFallback: "Model not found automatically. Upload it manually for this demo:",
-                modelUpload: "Upload model_final_bilstm.onnx",
                 dataTitle: "1. Upload Data",
                 dataDesc: "Your data never leaves your computer. Processed locally.",
                 dataWait: "Waiting for engine...",
-                dayTitle: "2. Day to Review",
+                dataReady: "Select one or more CSV files",
+                sourceTitle: "2. CSV and sensor to review",
+                dayTitle: "3. Day to Review",
+                resultsGuideBtn: "Trilingual results guide",
+                btnNewLabel: "New label",
+                btnCancel: "Cancel",
+                boundaryTitle: "Adjust segment boundaries",
+                boundaryStart: "Start",
+                boundaryEnd: "End",
+                btnApplyBounds: "Apply boundaries",
                 legendTitle: "Behavior Legend",
                 legendNocturnal: "Nocturnal (Key: 3)",
                 legendOff: "Off (Out of nest) (Key: 2)",
@@ -603,6 +626,7 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                 thDuration: "Duration",
                 thTemp: "Avg Temp",
                 thBehavior: "Behavior",
+                thEdit: "Edit",
                 modalTitle: "Finished",
                 modalDesc: "Your results have been successfully exported to your local downloads folder.",
                 modalBtn: "Close and Return",
@@ -629,14 +653,19 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                 declineMsg: "Você deve aceitar os termos para usar esta ferramenta local.",
                 appSubtitle: "Processamento 100% Local (Privado)",
                 btnFinish: "Terminar Inferência",
-                modelTitle: "Motor de Inferência",
-                modelSearch: "Buscando modelo no servidor...",
-                modelFallback: "Modelo não encontrado automaticamente. Envie manualmente para esta demo:",
-                modelUpload: "Enviar model_final_bilstm.onnx",
                 dataTitle: "1. Enviar Dados",
                 dataDesc: "Seus dados nunca saem do seu computador. Processados localmente.",
                 dataWait: "Aguardando motor...",
-                dayTitle: "2. Dia para Revisar",
+                dataReady: "Selecione um ou mais arquivos CSV",
+                sourceTitle: "2. CSV e sensor para revisar",
+                dayTitle: "3. Dia para Revisar",
+                resultsGuideBtn: "Guia trilíngue de resultados",
+                btnNewLabel: "Nova etiqueta",
+                btnCancel: "Cancelar",
+                boundaryTitle: "Ajustar limites do segmento",
+                boundaryStart: "Início",
+                boundaryEnd: "Fim",
+                btnApplyBounds: "Aplicar limites",
                 legendTitle: "Legenda de Comportamento",
                 legendNocturnal: "Nocturnal (Teclado: 3)",
                 legendOff: "Off (Fora do ninho) (Teclado: 2)",
@@ -654,6 +683,7 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                 thDuration: "Duração",
                 thTemp: "Temp Méd.",
                 thBehavior: "Comportamento",
+                thEdit: "Editar",
                 modalTitle: "Concluído",
                 modalDesc: "Seus resultados foram exportados com sucesso para a sua pasta local de downloads.",
                 modalBtn: "Fechar e Retornar",
@@ -680,14 +710,19 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                 declineMsg: "Vous devez accepter les conditions pour utiliser cet outil local.",
                 appSubtitle: "Traitement 100% Local (Privé)",
                 btnFinish: "Terminer l'Inférence",
-                modelTitle: "Moteur d'Inférence",
-                modelSearch: "Recherche du modèle sur le serveur...",
-                modelFallback: "Modèle introuvable. Veuillez le télécharger pour cette démo:",
-                modelUpload: "Téléverser model_final_bilstm.onnx",
                 dataTitle: "1. Téléverser vos données",
                 dataDesc: "Vos données ne quittent jamais votre ordinateur. Elles sont traitées localement.",
                 dataWait: "En attente du moteur d’inférence...",
-                dayTitle: "2. Jour à Réviser",
+                dataReady: "Sélectionnez un ou plusieurs fichiers CSV",
+                sourceTitle: "2. CSV et capteur à réviser",
+                dayTitle: "3. Jour à réviser",
+                resultsGuideBtn: "Guide trilingue des résultats",
+                btnNewLabel: "Nouvelle étiquette",
+                btnCancel: "Annuler",
+                boundaryTitle: "Ajuster les limites du segment",
+                boundaryStart: "Début",
+                boundaryEnd: "Fin",
+                btnApplyBounds: "Appliquer les limites",
                 legendTitle: "Légende des Comportements",
                 legendNocturnal: "Nocturnal (Touche: 3)",
                 legendOff: "Off (Hors du nid) (Touche: 2)",
@@ -705,6 +740,7 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                 thDuration: "Durée",
                 thTemp: "Temp Moy.",
                 thBehavior: "Comportement",
+                thEdit: "Modifier",
                 modalTitle: "Terminé",
                 modalDesc: "Vos résultats ont été exportés avec succès vers votre dossier de téléchargements local.",
                 modalBtn: "Fermer et Retourner",
@@ -740,917 +776,12 @@ Signature: BoutScout-JL-GL-2026-local-onnx
                 if(translations[lang][key]) el.innerText = translations[lang][key];
             });
 
-            if (isEditMode) document.getElementById('btnEditOnText').innerText = t('btnEditOff');
-            else document.getElementById('btnEditOnText').innerText = t('btnEditOn');
-
-            if (selectedEventId === null && selectedRange === null) {
-                document.getElementById('selectedSegmentMsg').innerText = t('editBannerNone');
-            }
+            if (window.syncBoutScoutLanguageUI) window.syncBoutScoutLanguageUI();
         }
 
         function t(key) { return translations[currentLang][key]; }
 
-        // --- 1. CONFIGURACIÓN PRINCIPAL ---
-        ort.env.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/";
-
-        const COLORS = { "Nocturnal": "#333E48", "Off": "#535AA6", "On": "#E28342", "Unlabeled": "#e2e8f0" };
-        const LABEL_MAP = { 0: "Nocturnal", 1: "Off", 2: "On" };
-        let modelSession = null;
-        let daysData = {};
-        let currentDay = null;
-        let currentEvents = [];
-
-        // Estado de Edición
-        let isEditMode = false;
-        let selectedEventId = null;
-        let selectedRange = null;
-
-        function logDebug(msg) {
-            const logBox = document.getElementById('debugLog');
-            logBox.innerHTML += `> ${msg}<br>`;
-            logBox.scrollTop = logBox.scrollHeight;
-        }
-
-        function showNotification(text) {
-            const notif = document.getElementById('notification');
-            document.getElementById('notificationText').innerText = text;
-            notif.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => notif.classList.add('translate-y-20', 'opacity-0'), 3000);
-        }
-
-        // --- 2. CARGA DEL MODELO ---
-        window.onload = async function() {
-            logDebug("Verificando existencia del modelo en el servidor...");
-            try {
-                const response = await fetch('model_final_bilstm.onnx');
-                if (!response.ok) throw new Error("Archivo no disponible en URL.");
-                const buffer = await response.arrayBuffer();
-                await initONNXSession(buffer);
-                document.getElementById('autoLoadStatus').innerHTML = `
-                    <div class="flex items-center gap-2 text-sm text-green-600 font-bold bg-green-50 p-2 rounded border border-green-200">
-                        <i class="ph ph-check-circle text-lg"></i> ONNX Ready
-                    </div>`;
-            } catch (err) {
-                document.getElementById('autoLoadStatus').innerHTML = `
-                    <div class="flex items-center gap-2 text-sm text-amber-600 font-bold">
-                        <i class="ph ph-warning"></i> Fallback Mode
-                    </div>`;
-                document.getElementById('manualModelUpload').classList.remove('hidden');
-            }
-        };
-
-        document.getElementById('onnxFileInput').addEventListener('change', async function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            document.getElementById('onnxNameDisplay').innerText = file.name;
-            try {
-                const buffer = await file.arrayBuffer();
-                await initONNXSession(buffer);
-                document.getElementById('autoLoadStatus').innerHTML = `
-                    <div class="flex items-center gap-2 text-sm text-green-600 font-bold bg-green-50 p-2 rounded border border-green-200 mt-2">
-                        <i class="ph ph-check-circle text-lg"></i> ONNX Ready
-                    </div>`;
-            } catch (err) { alert("Error cargando ONNX: " + err.message); }
-        });
-
-        async function initONNXSession(buffer) {
-            ort.env.wasm.numThreads = Math.min(navigator.hardwareConcurrency || 4, 4);
-            modelSession = await ort.InferenceSession.create(buffer, { executionProviders: ['wasm'] });
-
-            const csvInput = document.getElementById('csvFileInput');
-            const csvLabel = document.getElementById('csvLabel');
-            csvInput.disabled = false;
-            csvInput.classList.replace('cursor-not-allowed', 'cursor-pointer');
-            csvLabel.classList.remove('opacity-50');
-            csvLabel.classList.replace('border-slate-300', 'border-blue-400');
-            csvLabel.classList.add('bg-blue-50', 'hover:bg-blue-100', 'hover:border-blue-500');
-            document.getElementById('csvNameDisplay').innerHTML = "Click o Arrastra <strong>.csv</strong>";
-            document.getElementById('csvNameDisplay').classList.replace('text-slate-600', 'text-blue-700');
-        }
-
-        // --- 3. PROCESAMIENTO DE DATOS ---
-
-        async function loadDemoData() {
-            if (!modelSession) {
-                alert("El modelo todavía no está listo.");
-                return;
-            }
-
-            document.getElementById('csvNameDisplay').innerText = "demo_nest_processed.csv";
-            document.getElementById('loadingIndicator').classList.remove('hidden');
-            document.getElementById('initialMessage').classList.add('hidden');
-
-            Papa.parse("data/demo_nest_processed.csv", {
-                download: true,
-                header: false,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    processData(results.data);
-                },
-                error: function(err) {
-                    alert("No se pudo cargar el archivo demo: " + err.message);
-                    document.getElementById('loadingIndicator').classList.add('hidden');
-                }
-            });
-        }
-
-        document.getElementById('csvFileInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file || !modelSession) return;
-            document.getElementById('csvNameDisplay').innerText = file.name;
-            document.getElementById('loadingIndicator').classList.remove('hidden');
-            document.getElementById('initialMessage').classList.add('hidden');
-            Papa.parse(file, { header: false, skipEmptyLines: true, complete: function(results) { processData(results.data); } });
-        });
-
-        async function processData(data) {
-            daysData = {};
-
-            const parsedRows = [];
-
-            for (let i = 1; i < data.length; i++) {
-                const row = data[i];
-
-                if (!row || row.length < 3) continue;
-
-                const rawDate = row[1];
-                const rawEgg = row[2];
-                const rawAmbient = row.length > 3 ? row[3] : row[2];
-
-                if (!rawDate || rawEgg === undefined || isNaN(parseFloat(rawEgg))) continue;
-
-                const datetime = new Date(String(rawDate).trim());
-
-                if (isNaN(datetime.getTime())) {
-                    logDebug(`Fila omitida por fecha inválida: ${rawDate}`);
-                    continue;
-                }
-
-                const eggTemp = parseFloat(rawEgg);
-                const ambientTemp = !isNaN(parseFloat(rawAmbient)) ? parseFloat(rawAmbient) : eggTemp;
-
-                const year = datetime.getFullYear();
-                const month = String(datetime.getMonth() + 1).padStart(2, "0");
-                const day = String(datetime.getDate()).padStart(2, "0");
-                const dateOnly = `${year}-${month}-${day}`;
-
-                const minuteOfDay = datetime.getHours() * 60 + datetime.getMinutes();
-
-                parsedRows.push({
-                    date: dateOnly,
-                    datetime: datetime.toISOString(),
-                    minute_of_day: minuteOfDay,
-                    egg_temperature: eggTemp,
-                    ambient_temperature: ambientTemp,
-                    hour_sin: Math.sin(2 * Math.PI * minuteOfDay / 1440.0),
-                    hour_cos: Math.cos(2 * Math.PI * minuteOfDay / 1440.0),
-                    minute_of_day_scaled: minuteOfDay / 1439.0,
-                    raw_label: "Unknown",
-                    final_label: "Unknown"
-                });
-            }
-
-            parsedRows.sort((a, b) => {
-                if (a.date === b.date) return a.minute_of_day - b.minute_of_day;
-                return a.date.localeCompare(b.date);
-            });
-
-            const groupedByDate = {};
-
-            parsedRows.forEach(row => {
-                if (!groupedByDate[row.date]) groupedByDate[row.date] = [];
-                groupedByDate[row.date].push(row);
-            });
-
-            const dateSelect = document.getElementById('dateSelect');
-            dateSelect.innerHTML = '';
-
-            let keptDays = 0;
-            let skippedDays = 0;
-
-            for (const date of Object.keys(groupedByDate).sort()) {
-                const dayArray = groupedByDate[date];
-
-                const uniqueMinuteMap = new Map();
-
-                dayArray.forEach(row => {
-                    if (!uniqueMinuteMap.has(row.minute_of_day)) {
-                        uniqueMinuteMap.set(row.minute_of_day, row);
-                    }
-                });
-
-                const cleanDay = Array.from(uniqueMinuteMap.values())
-                    .sort((a, b) => a.minute_of_day - b.minute_of_day);
-
-                const hasAllMinutes =
-                    cleanDay.length === 1440 &&
-                    cleanDay[0].minute_of_day === 0 &&
-                    cleanDay[1439].minute_of_day === 1439;
-
-                if (!hasAllMinutes) {
-                    skippedDays += 1;
-                    logDebug(`Día ${date} omitido: ${cleanDay.length}/1440 minutos completos.`);
-                    continue;
-                }
-
-                daysData[date] = cleanDay;
-                await runBiLSTM(daysData[date]);
-
-                const opt = document.createElement('option');
-                opt.value = date;
-                opt.innerText = date;
-                dateSelect.appendChild(opt);
-
-                keptDays += 1;
-            }
-
-            document.getElementById('loadingIndicator').classList.add('hidden');
-
-            const dias = Object.keys(daysData);
-
-            if (dias.length === 0) {
-                alert("No se encontraron días completos de 1440 minutos. Revisa el formato del CSV.");
-                document.getElementById('initialMessage').classList.remove('hidden');
-                return;
-            }
-
-            document.getElementById('dateSelectorContainer').classList.remove('hidden');
-            loadDay(dias[0]);
-
-            dateSelect.onchange = (e) => loadDay(e.target.value);
-
-            logDebug(`Días completos usados: ${keptDays}. Días omitidos: ${skippedDays}.`);
-        }
-
-        async function runBiLSTM(dayArray) {
-            try {
-                const floatArray = new Float32Array(1440 * 5);
-                for (let i = 0; i < 1440; i++) {
-                    let row = dayArray[i];
-                    floatArray[i*5 + 0] = row.egg_temperature; floatArray[i*5 + 1] = row.ambient_temperature;
-                    floatArray[i*5 + 2] = row.hour_sin; floatArray[i*5 + 3] = row.hour_cos; floatArray[i*5 + 4] = row.minute_of_day_scaled;
-                }
-                const tensor = new ort.Tensor('float32', floatArray, [1, 1440, 5]);
-                const feeds = {}; feeds[modelSession.inputNames[0]] = tensor;
-                const results = await modelSession.run(feeds);
-                const outputData = results[modelSession.outputNames[0]].data;
-
-                for (let i = 0; i < 1440; i++) {
-                    let maxIdx = 0, maxVal = outputData[i*3];
-                    if (outputData[i*3+1] > maxVal) { maxVal = outputData[i*3+1]; maxIdx = 1; }
-                    if (outputData[i*3+2] > maxVal) { maxVal = outputData[i*3+2]; maxIdx = 2; }
-                    dayArray[i].raw_label = LABEL_MAP[maxIdx];
-                    dayArray[i].final_label = LABEL_MAP[maxIdx];
-                }
-            } catch (err) {}
-        }
-
-        // --- 4. RENDERIZADO Y LÓGICA DE EDICIÓN ---
-        function loadDay(dateStr) {
-            currentDay = dateStr;
-            selectedEventId = null;
-            selectedRange = null;
-            document.getElementById('selectedSegmentMsg').innerText = t('editBannerNone');
-            document.getElementById('workspace').classList.remove('hidden');
-            recalculateEvents(daysData[dateStr]);
-        }
-
-        function recalculateEvents(dayData) {
-            currentEvents = [];
-            let currentEv = null;
-
-            dayData.forEach((row) => {
-                if (!currentEv) {
-                    currentEv = { start_minute: row.minute_of_day, end_minute: row.minute_of_day, label: row.final_label, tempSum: row.egg_temperature, count: 1 };
-                } else if (row.final_label === currentEv.label) {
-                    currentEv.end_minute = row.minute_of_day; currentEv.tempSum += row.egg_temperature; currentEv.count++;
-                } else {
-                    currentEv.mean_temp = (currentEv.tempSum / currentEv.count).toFixed(2);
-                    currentEvents.push({...currentEv});
-                    currentEv = { start_minute: row.minute_of_day, end_minute: row.minute_of_day, label: row.final_label, tempSum: row.egg_temperature, count: 1 };
-                }
-            });
-            if (currentEv) {
-                currentEv.mean_temp = (currentEv.tempSum / currentEv.count).toFixed(2);
-                currentEvents.push(currentEv);
-            }
-            currentEvents.forEach((e, idx) => e.id = idx);
-
-            renderChart(dayData);
-            renderTable();
-        }
-
-        function renderChart(dayData, preserveZoom = false) {
-            const eggTrace = {
-              x: dayData.map(d => d.minute_of_day),
-              y: dayData.map(d => d.egg_temperature),
-              type: 'scatter',
-              mode: 'lines',
-              line: { color: '#0f172a', width: 1.5 },
-              name: 'Nest / Egg temp',
-              hovertemplate: 'Min: %{x}<br>Nest/Egg: %{y:.1f}°C<extra></extra>'
-          };
-
-          const ambientTrace = {
-              x: dayData.map(d => d.minute_of_day),
-              y: dayData.map(d => d.ambient_temperature),
-              type: 'scatter',
-              mode: 'lines',
-              line: { color: '#94a3b8', width: 1.8 },
-              name: 'Ambient temp',
-              hovertemplate: 'Min: %{x}<br>Ambient: %{y:.1f}°C<extra></extra>'
-          };
-
-            const shapes = currentEvents.map(ev => {
-                let isSelected = (ev.id === selectedEventId);
-                return {
-                    type: 'rect', xref: 'x', yref: 'paper',
-                    x0: ev.start_minute, y0: 0, x1: ev.end_minute, y1: 1,
-                    fillcolor: COLORS[ev.label],
-                    opacity: isSelected ? 0.6 : (ev.label === 'Unlabeled' ? 0.15 : 0.25),
-                    line: { color: isSelected ? '#1e293b' : 'transparent', width: isSelected ? 2 : 0 },
-                    layer: 'below'
-                };
-            });
-
-            const graphDiv = document.getElementById('plotlyChart');
-            let currentRange = [0, 1440];
-            if (preserveZoom && graphDiv.layout && graphDiv.layout.xaxis && graphDiv.layout.xaxis.range) {
-                currentRange = graphDiv.layout.xaxis.range;
-            }
-
-            const layout = {
-                margin: { t: 10, r: 10, b: 0, l: 40 },
-                hovermode: 'x unified', showlegend: true,
-                dragmode: isEditMode ? 'select' : 'zoom',
-                xaxis: {
-                    title: '',
-                    range: currentRange,
-                    rangeslider: { visible: true, thickness: 0.15, bgcolor: '#f1f5f9' }
-                },
-                yaxis: { fixedrange: true },
-                plot_bgcolor: '#ffffff', shapes: shapes
-            };
-
-            if (preserveZoom) {
-                Plotly.react('plotlyChart', [ambientTrace, eggTrace], layout, {responsive: true, displayModeBar: false});
-            } else {
-                Plotly.newPlot('plotlyChart', [ambientTrace, eggTrace], layout, {responsive: true, displayModeBar: false});
-
-                graphDiv.on('plotly_selected', function(eventData) {
-                    if (!isEditMode) return;
-                    if (eventData && eventData.range && eventData.range.x) {
-                        selectedEventId = null;
-                        selectedRange = [Math.floor(eventData.range.x[0]), Math.ceil(eventData.range.x[1])];
-                        document.getElementById('selectedSegmentMsg').innerHTML = `${t('editBannerSelected')} <span class="bg-white px-1 py-0.5 rounded shadow-sm text-slate-800">${selectedRange[0]} - ${selectedRange[1]}</span>`;
-                        renderChart(daysData[currentDay], true);
-                    }
-                });
-
-                graphDiv.on('plotly_click', function(data) {
-                    if (!isEditMode) return;
-                    if (data.points.length > 0) {
-                        const clickX = data.points[0].x;
-                        const clickedEvent = currentEvents.find(ev => clickX >= ev.start_minute && clickX <= ev.end_minute);
-                        if (clickedEvent) {
-                            selectedRange = null;
-                            Plotly.restyle(graphDiv, {'selectedpoints': [null]});
-
-                            if (selectedEventId === clickedEvent.id) {
-                                selectedEventId = null;
-                                document.getElementById('selectedSegmentMsg').innerText = t('editBannerNone');
-                            } else {
-                                selectedEventId = clickedEvent.id;
-                                document.getElementById('selectedSegmentMsg').innerHTML = `${t('editBannerSelected')} <span class="bg-white px-1 py-0.5 rounded shadow-sm text-slate-800">${clickedEvent.start_minute} - ${clickedEvent.end_minute}</span>`;
-                            }
-                            renderChart(daysData[currentDay], true);
-                        }
-                    }
-                });
-            }
-        }
-
-        // --- SISTEMA DE EDICIÓN ---
-        function toggleEditMode() {
-            isEditMode = !isEditMode;
-            const btn = document.getElementById('btnToggleEdit');
-            const banner = document.getElementById('editModeBanner');
-            const textSpan = document.getElementById('btnEditOnText');
-            const graphDiv = document.getElementById('plotlyChart');
-
-            if (isEditMode) {
-                btn.classList.add('editing-active');
-                textSpan.innerText = t('btnEditOff');
-                banner.classList.remove('hidden');
-                Plotly.relayout(graphDiv, { dragmode: 'select' });
-            } else {
-                btn.classList.remove('editing-active');
-                textSpan.innerText = t('btnEditOn');
-                banner.classList.add('hidden');
-                selectedEventId = null;
-                selectedRange = null;
-                document.getElementById('selectedSegmentMsg').innerText = t('editBannerNone');
-                Plotly.relayout(graphDiv, { dragmode: 'zoom' });
-                Plotly.restyle(graphDiv, {'selectedpoints': [null]});
-                renderChart(daysData[currentDay], true);
-            }
-        }
-
-        window.addEventListener('keydown', function(e) {
-            if (!isEditMode) return;
-            if (selectedEventId === null && selectedRange === null) return;
-
-            let newLabel = null;
-            if (e.key === '1') newLabel = 'On';
-            else if (e.key === '2') newLabel = 'Off';
-            else if (e.key === '3') newLabel = 'Nocturnal';
-            else if (e.key === 'Backspace' || e.key === 'Delete') newLabel = 'Unlabeled';
-
-            if (newLabel) {
-                const dayData = daysData[currentDay];
-
-                if (selectedRange !== null) {
-                    dayData.forEach(row => {
-                        if (row.minute_of_day >= selectedRange[0] && row.minute_of_day <= selectedRange[1]) {
-                            row.final_label = newLabel;
-                        }
-                    });
-                }
-                else if (selectedEventId !== null) {
-                    const ev = currentEvents.find(e => e.id === selectedEventId);
-                    if (ev) {
-                        dayData.forEach(row => {
-                            if (row.minute_of_day >= ev.start_minute && row.minute_of_day <= ev.end_minute) {
-                                row.final_label = newLabel;
-                            }
-                        });
-                    }
-                }
-
-                selectedEventId = null;
-                selectedRange = null;
-                document.getElementById('selectedSegmentMsg').innerText = t('editBannerNone');
-                Plotly.restyle('plotlyChart', {'selectedpoints': [null]});
-
-                recalculateEvents(dayData);
-                renderChart(dayData, true);
-                if(isEditMode) Plotly.relayout('plotlyChart', { dragmode: 'select' });
-
-                showNotification(`Aplicado: ${newLabel}`);
-            }
-        });
-
-        function renderTable() {
-            const tbody = document.getElementById('eventsTableBody');
-            tbody.innerHTML = '';
-
-            currentEvents.forEach(ev => {
-                let duration = ev.end_minute - ev.start_minute + 1;
-                let tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 border-b border-slate-100 transition";
-                if (ev.id === selectedEventId) tr.classList.add('bg-blue-50/50');
-
-                const options = ["Nocturnal", "Off", "On", "Unlabeled"].map(opt =>
-                    `<option value="${opt}" ${ev.label === opt ? 'selected' : ''}>${opt}</option>`
-                ).join('');
-
-                let textColor = ev.label === 'Unlabeled' ? 'text-slate-600' : 'text-white';
-
-                tr.innerHTML = `
-                    <td class="px-5 py-3 font-mono text-xs text-slate-500">${ev.start_minute}</td>
-                    <td class="px-5 py-3 font-mono text-xs text-slate-500">${ev.end_minute}</td>
-                    <td class="px-5 py-3 font-bold text-slate-700">${duration} m</td>
-                    <td class="px-5 py-3 text-slate-600">${ev.mean_temp} °C</td>
-                    <td class="px-5 py-3">
-                        <span class="px-2.5 py-1 rounded-md text-[11px] font-bold ${textColor} shadow-sm" style="background-color: ${COLORS[ev.label]}">${ev.label}</span>
-                    </td>
-                    <td class="px-5 py-2.5">
-                        <select onchange="updateLabel(${ev.id}, this.value)" class="w-full bg-white border border-blue-200 rounded-lg px-3 py-1.5 text-sm font-bold text-blue-900 outline-none cursor-pointer hover:border-blue-400 focus:ring-2 focus:ring-blue-500 transition">
-                            ${options}
-                        </select>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        window.updateLabel = function(eventId, newLabel) {
-            const ev = currentEvents.find(e => e.id === eventId);
-            if (!ev || ev.label === newLabel) return;
-            const dayData = daysData[currentDay];
-            dayData.forEach(row => {
-                if (row.minute_of_day >= ev.start_minute && row.minute_of_day <= ev.end_minute) row.final_label = newLabel;
-            });
-            selectedEventId = null;
-            document.getElementById('selectedSegmentMsg').innerText = t('editBannerNone');
-            recalculateEvents(dayData);
-            renderChart(dayData, true);
-            showNotification(`Actualizado a ${newLabel}`);
-        };
-
-// --- 5. EXPORTACIÓN Y FINALIZACIÓN ---
-
-function finishInference() {
-    if (!currentDay || Object.keys(daysData).length === 0) {
-        alert("No hay datos para exportar.");
-        return;
-    }
-
-    exportAllResults();
-    document.getElementById('thankYouModal').classList.remove('hidden');
-}
-
-function getSensorType(sourceFile = "") {
-    const name = String(sourceFile).toLowerCase();
-    return name.includes("_soloegg") ? "egg" : "nest";
-}
-
-function csvEscape(value) {
-    if (value === null || value === undefined || Number.isNaN(value)) return "";
-    const str = String(value);
-    if (str.includes(",") || str.includes('"') || str.includes("\n")) {
-        return `"${str.replaceAll('"', '""')}"`;
-    }
-    return str;
-}
-
-function downloadCSV(filename, rows, columns) {
-    let csvContent = columns.join(",") + "\n";
-
-    rows.forEach(row => {
-        csvContent += columns.map(col => csvEscape(row[col])).join(",") + "\n";
-    });
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-function buildMinuteRows() {
-    const rows = [];
-
-    Object.keys(daysData).forEach(date => {
-        daysData[date].forEach(row => {
-            rows.push({
-                source_file: row.source_file || "uploaded_csv",
-                date: row.date,
-                datetime: row.datetime || "",
-                minute_of_day: row.minute_of_day,
-                egg_temperature: row.egg_temperature,
-                ambient_temperature: row.ambient_temperature,
-                raw_label: row.raw_label,
-                final_label: row.final_label
-            });
-        });
-    });
-
-    return rows;
-}
-
-function extractEventsFromDay(dayData, sourceFile = "uploaded_csv") {
-    const events = [];
-    let currentEvent = null;
-    let eventNumber = 1;
-    const eventCounters = {
-        On: 0,
-        Off: 0,
-        Nocturnal: 0,
-        Unlabeled: 0,
-        Unknown: 0
-    };
-
-    dayData.forEach(row => {
-        const label = row.final_label || "Unknown";
-
-        if (!currentEvent) {
-            currentEvent = {
-                source_file: sourceFile,
-                date: row.date,
-                label: label,
-                start_minute: row.minute_of_day,
-                end_minute: row.minute_of_day,
-                egg_values: [row.egg_temperature],
-                ambient_values: [row.ambient_temperature]
-            };
-        } else if (label === currentEvent.label) {
-            currentEvent.end_minute = row.minute_of_day;
-            currentEvent.egg_values.push(row.egg_temperature);
-            currentEvent.ambient_values.push(row.ambient_temperature);
-        } else {
-            events.push(finalizeEvent(currentEvent, eventNumber, eventCounters, sourceFile));
-            eventNumber += 1;
-
-            currentEvent = {
-                source_file: sourceFile,
-                date: row.date,
-                label: label,
-                start_minute: row.minute_of_day,
-                end_minute: row.minute_of_day,
-                egg_values: [row.egg_temperature],
-                ambient_values: [row.ambient_temperature]
-            };
-        }
-    });
-
-    if (currentEvent) {
-        events.push(finalizeEvent(currentEvent, eventNumber, eventCounters, sourceFile));
-    }
-
-    return events;
-}
-
-function mean(values) {
-    const clean = values.filter(v => v !== null && v !== undefined && !Number.isNaN(v));
-    if (clean.length === 0) return NaN;
-    return clean.reduce((a, b) => a + b, 0) / clean.length;
-}
-
-function min(values) {
-    const clean = values.filter(v => v !== null && v !== undefined && !Number.isNaN(v));
-    if (clean.length === 0) return NaN;
-    return Math.min(...clean);
-}
-
-function max(values) {
-    const clean = values.filter(v => v !== null && v !== undefined && !Number.isNaN(v));
-    if (clean.length === 0) return NaN;
-    return Math.max(...clean);
-}
-
-function std(values) {
-    const clean = values.filter(v => v !== null && v !== undefined && !Number.isNaN(v));
-    if (clean.length <= 1) return NaN;
-
-    const avg = mean(clean);
-    const variance = clean.reduce((sum, v) => sum + Math.pow(v - avg, 2), 0) / (clean.length - 1);
-
-    return Math.sqrt(variance);
-}
-
-function finalizeEvent(event, eventNumber, eventCounters, sourceFile) {
-    const label = event.label || "Unknown";
-
-    if (!eventCounters[label]) eventCounters[label] = 0;
-    eventCounters[label] += 1;
-
-    const duration = event.end_minute - event.start_minute + 1;
-    const eventId = `${label}_${eventCounters[label]}`;
-
-    const eggMean = mean(event.egg_values);
-    const ambientMean = mean(event.ambient_values);
-    const eggMin = min(event.egg_values);
-    const eggMax = max(event.egg_values);
-    const ambientMin = min(event.ambient_values);
-    const ambientMax = max(event.ambient_values);
-
-    return {
-        source_file: sourceFile,
-        date: event.date,
-        event_id: eventId,
-        event_number: eventNumber,
-        label: label,
-        start_minute: event.start_minute,
-        end_minute: event.end_minute,
-        duration_min: duration,
-        sensor_type: getSensorType(sourceFile),
-
-        mean_egg_temp: eggMean,
-        min_egg_temp: eggMin,
-        max_egg_temp: eggMax,
-
-        mean_ambient_temp: ambientMean,
-        min_ambient_temp: ambientMin,
-        max_ambient_temp: ambientMax,
-
-        min_egg_temp_off: label === "Off" ? eggMin : NaN,
-        min_ambient_temp_off: label === "Off" ? ambientMin : NaN,
-        mean_egg_temp_off: label === "Off" ? eggMean : NaN,
-        mean_ambient_temp_off: label === "Off" ? ambientMean : NaN,
-
-        mean_egg_temp_on: label === "On" ? eggMean : NaN,
-        mean_ambient_temp_on: label === "On" ? ambientMean : NaN,
-
-        mean_egg_temp_nocturnal: label === "Nocturnal" ? eggMean : NaN,
-        mean_ambient_temp_nocturnal: label === "Nocturnal" ? ambientMean : NaN
-    };
-}
-
-function buildEventRows() {
-    let allEvents = [];
-
-    Object.keys(daysData).forEach(date => {
-        const dayEvents = extractEventsFromDay(daysData[date], "uploaded_csv");
-        allEvents = allEvents.concat(dayEvents);
-    });
-
-    return allEvents;
-}
-
-function buildDailySummaryRows(events, minuteRows) {
-    const groupedEvents = {};
-
-    events.forEach(ev => {
-        const key = `${ev.source_file}__${ev.date}`;
-        if (!groupedEvents[key]) groupedEvents[key] = [];
-        groupedEvents[key].push(ev);
-    });
-
-    const groupedMinutes = {};
-
-    minuteRows.forEach(row => {
-        const sourceFile = row.source_file || "uploaded_csv";
-        const key = `${sourceFile}__${row.date}`;
-        if (!groupedMinutes[key]) groupedMinutes[key] = [];
-        groupedMinutes[key].push(row);
-    });
-
-    const summaries = [];
-
-    Object.keys(groupedEvents).forEach(key => {
-        const group = groupedEvents[key].sort((a, b) => a.start_minute - b.start_minute);
-        const first = group[0];
-
-        const onEvents = group.filter(ev => ev.label === "On");
-        const offEvents = group.filter(ev => ev.label === "Off");
-        const nocturnalEvents = group.filter(ev => ev.label === "Nocturnal");
-
-        let nestAttentivenessDay = NaN;
-        let duracionTotalOn = NaN;
-        let duracionIntervaloDay = NaN;
-        let inicioIntervalo = NaN;
-        let finIntervalo = NaN;
-
-        if (offEvents.length > 0 && nocturnalEvents.length > 0) {
-            inicioIntervalo = offEvents[0].start_minute;
-            finIntervalo = nocturnalEvents[nocturnalEvents.length - 1].start_minute - 1;
-            duracionIntervaloDay = finIntervalo - inicioIntervalo + 1;
-
-            if (duracionIntervaloDay > 0) {
-                const onEventsDay = onEvents.filter(ev =>
-                    ev.start_minute >= inicioIntervalo &&
-                    ev.end_minute <= finIntervalo
-                );
-
-                duracionTotalOn = onEventsDay.reduce((sum, ev) => sum + ev.duration_min, 0);
-                nestAttentivenessDay = duracionTotalOn / duracionIntervaloDay;
-            }
-        }
-
-        const minutes = groupedMinutes[key] || [];
-
-        const eggValues = minutes.map(r => Number(r.egg_temperature));
-        const ambientValues = minutes.map(r => Number(r.ambient_temperature));
-
-        const totalOn = onEvents.reduce((sum, ev) => sum + ev.duration_min, 0);
-        const totalOff = offEvents.reduce((sum, ev) => sum + ev.duration_min, 0);
-        const totalNocturnal = nocturnalEvents.reduce((sum, ev) => sum + ev.duration_min, 0);
-
-        summaries.push({
-            source_file: first.source_file,
-            date: first.date,
-            sensor_type: first.sensor_type,
-
-            nest_attentiveness_day: nestAttentivenessDay,
-            duracion_total_on: duracionTotalOn,
-            duracion_intervalo_day: duracionIntervaloDay,
-            inicio_intervalo: inicioIntervalo,
-            fin_intervalo: finIntervalo,
-
-            total_on_full_day: totalOn,
-            total_off_full_day: totalOff,
-            total_nocturnal_full_day: totalNocturnal,
-
-            avg_duracion_on: mean(onEvents.map(ev => ev.duration_min)),
-            avg_duracion_off: mean(offEvents.map(ev => ev.duration_min)),
-            avg_duracion_nocturnal: mean(nocturnalEvents.map(ev => ev.duration_min)),
-
-            min_duracion_on: min(onEvents.map(ev => ev.duration_min)),
-            max_duracion_on: max(onEvents.map(ev => ev.duration_min)),
-            min_duracion_off: min(offEvents.map(ev => ev.duration_min)),
-            max_duracion_off: max(offEvents.map(ev => ev.duration_min)),
-
-            n_eventos_on: onEvents.length,
-            n_eventos_off: offEvents.length,
-            n_eventos_nocturnal: nocturnalEvents.length,
-
-            avg_temp_ambient_diaria: mean(ambientValues),
-            std_temp_ambient_diaria: std(ambientValues),
-            avg_temp_sensor_diaria: mean(eggValues),
-            min_temp_sensor_diaria: min(eggValues),
-            max_temp_sensor_diaria: max(eggValues),
-
-            mean_min_egg_temp_off_bouts: mean(offEvents.map(ev => ev.min_egg_temp_off)),
-            lowest_egg_temp_recorded_during_off_bout: min(offEvents.map(ev => ev.min_egg_temp_off)),
-            mean_min_ambient_temp_off_bouts: mean(offEvents.map(ev => ev.min_ambient_temp_off)),
-            lowest_ambient_temp_recorded_during_off_bout: min(offEvents.map(ev => ev.min_ambient_temp_off))
-        });
-    });
-
-    return summaries;
-}
-
-function exportAllResults() {
-    const minuteRows = buildMinuteRows();
-    const eventRows = buildEventRows();
-    const dailyRows = buildDailySummaryRows(eventRows, minuteRows);
-
-    downloadCSV(
-        "BoutScout_minute_predictions_final.csv",
-        minuteRows,
-        [
-            "source_file",
-            "date",
-            "datetime",
-            "minute_of_day",
-            "egg_temperature",
-            "ambient_temperature",
-            "raw_label",
-            "final_label"
-        ]
-    );
-
-    downloadCSV(
-        "BoutScout_events_final.csv",
-        eventRows,
-        [
-            "source_file",
-            "date",
-            "event_id",
-            "event_number",
-            "label",
-            "start_minute",
-            "end_minute",
-            "duration_min",
-            "sensor_type",
-            "mean_egg_temp",
-            "min_egg_temp",
-            "max_egg_temp",
-            "mean_ambient_temp",
-            "min_ambient_temp",
-            "max_ambient_temp",
-            "min_egg_temp_off",
-            "min_ambient_temp_off",
-            "mean_egg_temp_off",
-            "mean_ambient_temp_off",
-            "mean_egg_temp_on",
-            "mean_ambient_temp_on",
-            "mean_egg_temp_nocturnal",
-            "mean_ambient_temp_nocturnal"
-        ]
-    );
-
-    downloadCSV(
-        "BoutScout_daily_summary.csv",
-        dailyRows,
-        [
-            "source_file",
-            "date",
-            "sensor_type",
-
-            "nest_attentiveness_day",
-            "duracion_total_on",
-            "duracion_intervalo_day",
-            "inicio_intervalo",
-            "fin_intervalo",
-
-            "total_on_full_day",
-            "total_off_full_day",
-            "total_nocturnal_full_day",
-
-            "avg_duracion_on",
-            "avg_duracion_off",
-            "avg_duracion_nocturnal",
-
-            "min_duracion_on",
-            "max_duracion_on",
-            "min_duracion_off",
-            "max_duracion_off",
-
-            "n_eventos_on",
-            "n_eventos_off",
-            "n_eventos_nocturnal",
-
-            "avg_temp_ambient_diaria",
-            "std_temp_ambient_diaria",
-            "avg_temp_sensor_diaria",
-            "min_temp_sensor_diaria",
-            "max_temp_sensor_diaria",
-
-            "mean_min_egg_temp_off_bouts",
-            "lowest_egg_temp_recorded_during_off_bout",
-            "mean_min_ambient_temp_off_bouts",
-            "lowest_ambient_temp_recorded_during_off_bout"
-        ]
-    );
-}
-
-function closeModal() {
-    document.getElementById('thankYouModal').classList.add('hidden');
-}
     </script>
+    <script src="js/app.js"></script>
 </body>
 </html>

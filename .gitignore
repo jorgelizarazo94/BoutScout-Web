@@ -10,4 +10,5 @@ Thumbs.db
 *.log
 node_modules/
 dist/
+tmp/
 data/Tangara_*.csv
